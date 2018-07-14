@@ -1,7 +1,9 @@
 let bodyParser = require('body-parser');
 let express = require('express');
 
-let postAuthenticationController = require('./controllers/postAuthenticationController');
+let getUsersController = require('./controllers/getUsers');
+let getUserWithIdController = require('./controllers/getUserWithId');
+let getUserWithUsernameAndPasswordController = require('./controllers/getUserWithUsernameAndPassword');
 
 let app = express();
 
@@ -13,4 +15,6 @@ app.listen(3001, () => console.log('turtle-auth listening on port 3001!'));
 
 app.set('etag', false);
 
-app.post('/api/authenticate', postAuthenticationController);
+app.get('/api/users', getUsersController);
+app.get('/api/users/:id', getUserWithIdController);
+app.get('/api/users/:username/password/:password', getUserWithUsernameAndPasswordController);

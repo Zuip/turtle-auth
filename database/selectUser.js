@@ -7,7 +7,7 @@ module.exports = {
       userId
     );
   },
-  withUsername: function (username) {
+  withUsername: function(username) {
     return db.one(
       'SELECT * FROM user_account WHERE lower(name) = $1',
       username.toLowerCase()

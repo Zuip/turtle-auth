@@ -1,24 +1,22 @@
+let formatUser = require('../services/formatUser');
 let selectUser = require('../database/selectUser');
 let password = require('../services/password');
 
 module.exports = function(req, res) {
   selectUser.withUsername(
-    req.body.username
-  ).then(data => {
+    req.params.username
+  ).then(user => {
     password.validate(
-      req.body.password,
-      data.password,
+      req.params.password,
+      user.password,
       function isValid() {
-        res.json({
-          user: data,
-          success: true
-        });
+        res.json(formatUser(user));
       },
       function isNotValid() {
-        res.json({ success: false });
+        res.status('404').json({});
       }
     );
   }).catch(function(err) {
-    res.json({ success: false });
+    res.status('500').json({});
   });
 };
