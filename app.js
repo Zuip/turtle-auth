@@ -3,7 +3,6 @@ let express = require('express');
 
 let getUsersController = require('./controllers/getUsers');
 let getUserWithIdController = require('./controllers/getUserWithId');
-let getUserWithUsernameAndPasswordController = require('./controllers/getUserWithUsernameAndPassword');
 
 let app = express();
 
@@ -17,4 +16,3 @@ app.set('etag', false);
 
 app.get('/api/users', getUsersController);
 app.get('/api/users/:id', getUserWithIdController);
-app.get('/api/users/:username/password/:password', getUserWithUsernameAndPasswordController);
