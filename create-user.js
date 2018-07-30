@@ -1,11 +1,18 @@
 let prompt = require('prompt');
 
-let db = require('./database/connection');
-let passwordHandler = require('./services/password');
+let insertRoleToUser = require('./database/insertRoleToUser');
+let insertUser = require('./database/insertUser');
 
 prompt.start();
 
-prompt.get(['username', 'password'], function (err, result) {
+prompt.get([
+  'username',
+  'password',
+  {
+    name: 'addAdmin',
+    message: 'Add admin permissions (y/n)'
+  }
+], function (err, result) {
 
   if(result.username.length < 3) {
     console.log('Too short username!');
@@ -17,18 +24,22 @@ prompt.get(['username', 'password'], function (err, result) {
     return;
   }
 
-  passwordHandler.generateHash(result.password, function(hashedPassword) {
+  insertUser(
+    result.username,
+    result.password,
+    1
+  ).then(userId => {
 
-    db.none(
-      `
-        INSERT INTO user_account (name, password)
-        VALUES ($1, $2)
-      `,
-      [result.username, hashedPassword]
-    );
+    if(result.addAdmin !== 'y') {
+      return;
+    }
 
+    return insertRoleToUser(userId, 'admin');
+    
+  }).then(() => {
     console.log('User was created!');
-
     process.exit(1);
-  });
+  }).catch(
+    error => console.log(error)
+  );
 });
