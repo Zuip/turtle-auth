@@ -9,14 +9,25 @@ module.exports = function(req, res) {
     return getSingleUser(req, res);
   }
 
-  selectUsers.all().then(
-    users => formatUsers(users)
+  getUsers(
+    req
   ).then(users => {
     res.json(users);
   }).catch(function(err) {
     res.status('500').json({});
   });
 };
+
+function getUsers(req) {
+
+  if(typeof req.query.ids !== 'undefined') {
+    return selectUsers.withIds(req.query.ids.split(','));
+  }
+
+  return selectUsers.all().then(
+    users => formatUsers(users)
+  )
+}
 
 function getSingleUser(req, res) {
 
