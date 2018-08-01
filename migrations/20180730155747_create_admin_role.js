@@ -5,7 +5,7 @@ exports.up = function(knex, KnexPromise) {
       ]).returning('id'),
       knex('permission').insert([
         { target: 'cities', action: 'update' },
-        { target: 'cities', action: 'cities' },
+        { target: 'cities', action: 'create' },
         { target: 'cities', action: 'remove' }
       ]).returning('id')
   ]).then(data => {
