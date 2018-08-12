@@ -1,8 +1,8 @@
-let bcrypt = require('bcrypt');
+let bcrypt = require('bcrypt-nodejs');
 
 module.exports = {
   generateHash: function(password, callback) {
-    bcrypt.hash(password, 10, function(err, hash) {
+    bcrypt.hash(password, bcrypt.genSaltSync(12), null, function(err, hash) {
       callback(hash);
     });
   },
