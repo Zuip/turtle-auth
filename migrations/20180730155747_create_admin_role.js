@@ -4,12 +4,15 @@ exports.up = function(knex, KnexPromise) {
         {key: 'admin'}
       ]).returning('id'),
       knex('permission').insert([
-        { target: 'cities', action: 'update' },
-        { target: 'cities', action: 'create' },
-        { target: 'cities', action: 'remove' },
-        { target: 'users',  action: 'update' },
-        { target: 'users',  action: 'create' },
-        { target: 'users',  action: 'remove' }
+        { target: 'cities',          action: 'update' },
+        { target: 'cities',          action: 'create' },
+        { target: 'cities',          action: 'remove' },
+        { target: 'city-questions',  action: 'update' },
+        { target: 'city-questions',  action: 'create' },
+        { target: 'city-questions',  action: 'remove' },
+        { target: 'users',           action: 'update' },
+        { target: 'users',           action: 'create' },
+        { target: 'users',           action: 'remove' }
       ]).returning('id')
   ]).then(data => {
     let roleId = data[0][0];
