@@ -31,36 +31,32 @@ function getUsers(req) {
 
 function getSingleUser(req, res) {
 
-  let userPromise = selectUser.withUsername(
+  return selectUser.withUsername(
     req.query.username
-  );
+  ).then(user => {
 
-  if(typeof req.query.password !== 'undefined') {
-    return validatePasswordAndGetUser(userPromise, req, res);
-  }
+    if(typeof req.query.password !== 'undefined') {
+      return validatePasswordAndGetUser(user, req, res);
+    }
 
-  return userPromise.then(user => {
-    res.json(formatUser(user));
+    return res.json(formatUser(user));
+
   }).catch(
     () => res.status('404').json({})
   );
 }
 
-function validatePasswordAndGetUser(userPromise, req, res) {
-  return userPromise.then(user => {
-    password.validate(
-      req.query.password,
-      user.password,
-      function isValid() {
-        res.json(formatUser(user));
-      },
-      function isNotValid() {
-        res.status('404').json({});
-      }
-    );
-  }).catch(function(err) {
-    res.status('500').json({});
-  });
+function validatePasswordAndGetUser(user, req, res) {
+  password.validate(
+    req.query.password,
+    user.password,
+    function isValid() {
+      res.json(formatUser(user));
+    },
+    function isNotValid() {
+      res.status('404').json({});
+    }
+  );
 }
 
 function formatUsers(users) {
